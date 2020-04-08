@@ -1,0 +1,79 @@
+    	html, body { height: 100%; }
+    	body { background: #000000; }
+    	a { color: blue; text-decoration: none;}      
+    	div.header {
+			position: fixed; 
+			font: 15pt Monaco, Regular, sans;  
+			right:0; 
+			left: 0; 
+			top:0; 
+			color: #fff; 
+			background: #101010; 
+			padding: 0.5em; 
+			text-align: left; 
+			border-bottom: solid 1px #202020;
+		}
+		.header a {
+			color: #B3B3B3;
+			padding: 0.5em;
+			border-left: solid 1px #202020;
+		}
+		.header :last-child {
+			border-right: solid 1px #202020;		
+		}
+		a.shitpeecockcuckold {
+			color: white;
+			border: 0;
+		}
+    	div.main {
+     		background-color: #141414;
+     		color: #B3B3B3;
+    		font: 20pt Monaco, Regular, sans;
+     		padding-left: 1em;
+     		padding-right: 1em;
+     		padding-top: 1em;
+     		padding-bottom: 0.5em;
+    		margin: 0 18% 0.2em;
+			border-right: solid 1px #202020;
+			border-left: solid 1px #202020;							
+    	}
+    	.main img {
+    		border: solid 2px #202020;							
+			width: 80%;
+			display: table-cell;
+			position: center;
+    	}  	
+    	.splitter {
+    		border-bottom: solid 1px #202020;
+    		margin-left: -1em;
+    		margin-right: -1em;
+    	}
+    	.imgtext {
+    		background: rgba(0, 0, 0, 0.5);
+    		position: absolute;
+    		top:0;
+    		font: 8pt Monaco, Regular, sans;
+			color: #B3B3B3; 
+			background: #101010; 
+			padding: 0em; 
+			text-align: left; 
+			border-top: solid 1px #202020;
+			width: 100%;    		
+    	}
+    	.cont {
+    		position: relative;
+    		text-align: center;
+    	}
+    	footer {
+    		position: bottom;			
+    		font: 8pt Monaco, Regular, sans;  
+			right:0; 
+			left: 0; 
+			bottom:0; 
+			color: #B3B3B3; 
+			background: #101010; 
+			padding: 0.5em; 
+			text-align: right; 
+			border-top: solid 1px #202020;
+			margin:-0.5em;
+    	}
