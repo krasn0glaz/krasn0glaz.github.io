@@ -25,6 +25,9 @@
 			color: white;
 			border: 0;
 		}
+		a.shitpeecockcuckoldish {
+			color: white;
+		}		
     	div.main {
      		background-color: #141414;
      		color: #B3B3B3;
@@ -64,14 +67,15 @@
     		text-align: center;
     	}
     	footer {
-    		position: bottom;			
-    		font: 8pt Monaco, Regular, sans;  
+    		position: fixed;
+       		font: 8pt Monaco, Regular, sans;  
 			right:0; 
 			left: 0; 
 			bottom:0; 
 			color: #B3B3B3; 
 			background: #101010; 
-			padding: 0.5em; 
+			padding: 0.5em;
+			padding-right: 1em; 
 			text-align: right; 
 			border-top: solid 1px #202020;
 			margin:-0.5em;
