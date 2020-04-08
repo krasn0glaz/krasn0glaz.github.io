@@ -51,8 +51,7 @@
     	.imgtext {
     		background: rgba(0, 0, 0, 0.5);
     		position: absolute;
-    		top:0;
-    		font: 8pt Monaco, Regular, sans;
+     		font: 8pt Monaco, Regular, sans;
 			color: #B3B3B3; 
 			background: #101010; 
 			padding: 0em; 
