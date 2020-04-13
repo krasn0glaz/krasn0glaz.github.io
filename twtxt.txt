@@ -2,3 +2,4 @@
 2020-04-09T00:38:06+03:00	just made awesome script
 2020-04-09T00:38:31+03:00	just made awesome script
 2020-04-09T00:43:15+03:00	this is basically a shell script that uploads my twtxt file to github
+2020-04-13T21:45:59+03:00	ping p0ng
