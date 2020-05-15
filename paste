@@ -1,0 +1,91 @@
+#!/usr/bin/perl
+use v5.14;
+BEGIN {
+  use Data::Dumper;$Data::Dumper::Terse=1;
+  *CORE::GLOBAL::log=sub{say STDERR "$$: ",ref?Dumper$_:$_ for @_};
+  $|=select(STDERR);
+  close STDIN;close STDOUT;
+}
+
+socket c, 2, 1, getprotobyname 'tcp' and setsockopt c, 1, 2, 1
+  and bind c, pack SnA4x8 => 2, 2, scalar gethostbyname '0.0.0.0'
+  and listen c, 10
+  or die $!;
+$SIG{CHLD}='IGNORE';
+$SIG{ALRM}=sub{exit};
+
+my$types;
+{
+  chomp(my@lt=`colorer -lt 2>/dev/null`);
+  my(@l,$G)=`colorer -l 2>/dev/null`;
+  for(0..$#l){
+    $l[$_]=~/(.*?): (.*)/;
+    $types.=($G ne$1 && '</optgroup>'x(!!$G)."<optgroup label='".($G=$1).":'>" || "")."<option value=$lt[$_]>$2"
+  }
+}
+
+for(1..5){next if fork;
+   {
+      $_=accept z,c;
+      if(fork){close z;redo}
+      else{
+        select z;$|=close c;
+        my%req=(ip=>join '.',unpack 'x4C4');
+        alarm 30;
+        @req{qw'method uri'}=split ' ',<z>,3;
+        while(<z>){
+          s/[\r\n]+$//;
+          last if /^$/;
+          $req{header}{lc$1}=$2 if /^(.*?): (.*)/;
+        }
+        log \%req;
+        my %C=split/; |=/,$req{header}{cookie};
+        $req{uri}=~'^/(\??)([\w.]{1,11})$';
+        $_ and $/=\$_ for $req{header}{'content-length'};
+        print +{
+          PASTE=>sub{
+              $/=\$req{uri};
+              $_[1](''.<z>,@{$req{header}}{'lang'})."\n";
+          },#PASTE
+
+          POST=>sub{
+              $_=$_[1](@{{map{y/+/ /;s/%([\dA-F]{2})/pack H2=>$1/iger}split/&|=/,<z>}}{qw'c t name key'},$2);
+              "$_[0]text/html\nRefresh: 0;URL=/?$_\n\n<a href='/?$_'>$req{header}{host}/?$_</a>";
+          },#POST
+
+          GET=>sub{
+              open f,$2;
+              open v,$2.'$';
+              log my%h=do{local$/;s=>[stat$2],split/=|\n/,<v>};
+              if($2&&!$1){
+                print $_[0].($h{ct}||'text/plain; charset=UTF-8')."\n\n";
+                $/=\2e6; print while<f>;
+                '';
+              }else{
+                my@s=map s/&/&amp;/gr=~s/</&lt;/gr=><f>;
+                our@r;*r=$h{s}[7]>5e5?\@s:[`colorer -eiutf-8 -eoutf-8 -h -dh -t'@{[$h{tp}||"autodetect"]}' $2`];
+"$_[0]text/html; charset=UTF-8\n\n<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'><html><head><meta http-equiv='content-type' content='text/html; charset=UTF-8'><title>paste.org.ru 2β</title><link rel=stylesheet type='text/css' media=screen href='/style.css'><script src='/paste.js'></script></head><body>
+<div id=outer><div id=head><table><tr><td><a href='/'>$req{header}{host}</a><td>".localtime($h{s}[9])."<td title=\"$r[0]\">@{[$r[0]=~/'(.*?)'/]}<td title=raw><a href='/$2'>$h{s}[7]</a><td style='text-align:right;width:100%' id='out'><td><a onclick='qq()'>qq</a><td><a href='/todo'>todo</a><td><a href='/readme'>readme</a></table></div>
+<div id=inner><ol>",(map"<li id='$_'><tt>$r[$_+1]</tt>",1..$#r-1),"</ol>
+<form method=post><button type=submit>paste</button> <select name=t><option>Autodetect$types</optgroup></select>
+<textarea cols=80 rows=25 name=c onkeypress='if(event.ctrlKey&&(event.keyCode==10||event.keyCode==13))form.submit()'>",@s,"</textarea>
+</form></div></div>
+";
+              }
+          },#GET
+
+        }->{$req{method}}->("HTTP/1.1 200 OK\nContent-Type: ",sub{
+          my $q='.';$q=join'',map$$_[rand@$_],([0..9,'a'..'z','A'..'Z'])x6 while -e$q;
+          log $q;
+          s/[^\w].*// for @_[1..4];
+          open f,">$$_[0]" and print f $$_[1] and close f for
+            [$q=>$_[0]],
+            [$q.'$'=>"ip=$req{ip}\ntp=$_[1]\nnm=$_[2]\nkey=$_[3]\npr=$_[4]"]
+          ;$q
+        });
+        log "exit $$";
+        exit;
+      }
+   }
+}
+
